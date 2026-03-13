@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface EntrenamientoRepository extends JpaRepository<RutinaEntity, Long> {
+public interface RutinaRepository extends JpaRepository<RutinaEntity, Long> {
 
     @Query("SELECT e FROM RutinaEntity e LEFT JOIN FETCH e.ejercicios")
     List<RutinaEntity> findAllWithEjercicios();

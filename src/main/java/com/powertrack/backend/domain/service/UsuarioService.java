@@ -1,28 +1,12 @@
 package com.powertrack.backend.domain.service;
 
-import 
 
-import com.powertrack.backend
-
-.data.UsuarioRepository;
-import com.powertrack.backend
-
-.data.entity.UsuarioEntity;
-import com.powertrack.backend
-
-.domain.error.BadRequestException;
-import com.powertrack.backend
-
-.domain.mapper.UsuarioMapper;
-import com.powertrack.backend
-
-.domain.model.Usuario;
-import com.powertrack.backend
-
-.ui.dto.UsuarioDTO;
-import com.powertrack.backend
-
-.ui.service.EmailService;
+import com.powertrack.backend.data.UsuarioRepository;
+import com.powertrack.backend.data.entity.UsuarioEntity;
+import com.powertrack.backend.domain.error.BadRequestException;
+import com.powertrack.backend.domain.mapper.UsuarioMapper;
+import com.powertrack.backend.domain.model.Usuario;
+import com.powertrack.backend.ui.dto.UsuarioDTO;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -37,18 +21,12 @@ import java.util.UUID;
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AsymmetricEncryptionService asymmetricService;
-    private final SymmetricEncryptionService symmetricService;
     private final UsuarioMapper usuarioMapper;
-    private final EmailService emailService;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder, AsymmetricEncryptionService asymmetricService, SymmetricEncryptionService symmetricService, UsuarioMapper usuarioMapper, EmailService emailService) {
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder,UsuarioMapper usuarioMapper) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
-        this.asymmetricService = asymmetricService;
-        this.symmetricService = symmetricService;
         this.usuarioMapper = usuarioMapper;
-        this.emailService = emailService;
     }
 
 

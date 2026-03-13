@@ -1,7 +1,6 @@
 package com.powertrack.backend.config;
 
-import
-.common.Constantes;
+import com.powertrack.backend.common.Constantes;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
