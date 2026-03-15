@@ -1,13 +1,9 @@
-package com.powertrack.backend.domain.model;
+package com.powertrack.backend.ui.dto;
 
-
-
-
-public record Ejercicio(
+public record EjercicioResponseDTO(
         Long id,
         String nombre,
         String tipoEntrenamiento,
         String imagenUrl,
         String descripcion
 ) {}
-

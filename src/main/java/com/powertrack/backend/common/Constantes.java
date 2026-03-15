@@ -113,6 +113,9 @@ public class Constantes {
     public static final String ERROR_REFRESCAR_TOKENS = "Error al refrescar tokens: {}";
     public static final String ERROR_ENVIAR_CORREO = "Error al enviar correo a: {}";
     public static final String ERROR_TOKEN_JWT = "Error al procesar el token JWT: ";
+    public static final String ACTIVACION_DE_CUENTA_SISTEMA = "Activación de cuenta - Sistema";
+    public static final String ERROR_AL_ENVIAR_CORREO_A = "Error al enviar correo a {}";
+
 
     // Swagger tags
     public static final String TAG_AUTH = "Autenticación";

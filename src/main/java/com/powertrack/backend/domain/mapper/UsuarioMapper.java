@@ -23,36 +23,39 @@ public class UsuarioMapper {
                 entity.isActivo(),
                 entity.getCodigoActivacion(),
                 entity.getExpiracionCodigo(),
-                entity.getTwoFactorEnabled(),
-                entity.getTwoFactorSecret(),
-                entity.getSalt(),
-                entity.getIv(),
-                entity.getClavePublica(),
-                entity.getClavePrivada()
+                entity.getGenero(),
+                entity.getEdad(),
+                entity.getObjetivo(),
+                entity.getNivel(),
+                entity.getDiasEntrenamiento(),
+                entity.getLesion(),
+                entity.getPreferencia(),
+                entity.getRecomendacion(),
+                entity.isFormularioCompletado()
         );
     }
 
-
-
     public UsuarioEntity toEntity(Usuario u) {
         if (u == null) return null;
-        return new UsuarioEntity(
-                u.id(),
-                u.username(),
-                u.password(),
-                u.email(),
-                u.nombre(),
-                u.activo(),
-                u.codigoActivacion(),
-                u.expiracionCodigo(),
-                u.rol(),
-                u.twoFactorEnabled(),
-                u.twoFactorSecret(),
-                u.salt(),
-                u.iv(),
-                u.publicKey(),
-                u.privateKeyEncrypted(),
-                null
-        );
+        UsuarioEntity entity = new UsuarioEntity();
+        entity.setId(u.id());
+        entity.setUsername(u.username());
+        entity.setPassword(u.password());
+        entity.setEmail(u.email());
+        entity.setNombre(u.nombre());
+        entity.setRol(u.rol());
+        entity.setActivo(u.activo());
+        entity.setCodigoActivacion(u.codigoActivacion());
+        entity.setExpiracionCodigo(u.expiracionCodigo());
+        entity.setGenero(u.genero());
+        entity.setEdad(u.edad());
+        entity.setObjetivo(u.objetivo());
+        entity.setNivel(u.nivel());
+        entity.setDiasEntrenamiento(u.diasEntrenamiento());
+        entity.setLesion(u.lesion());
+        entity.setPreferencia(u.preferencia());
+        entity.setRecomendacion(u.recomendacion());
+        entity.setFormularioCompletado(u.formularioCompletado());
+        return entity;
     }
 }

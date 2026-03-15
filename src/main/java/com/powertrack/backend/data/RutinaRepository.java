@@ -11,11 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface RutinaRepository extends JpaRepository<RutinaEntity, Long> {
-
-    @Query("SELECT e FROM RutinaEntity e LEFT JOIN FETCH e.ejercicios")
-    List<RutinaEntity> findAllWithEjercicios();
-
-    @Query("SELECT e FROM RutinaEntity e LEFT JOIN FETCH e.ejercicios WHERE e.id = :id")
-    Optional<RutinaEntity> findByIdWithEjercicios(@Param("id") Long id);
+    Optional<RutinaEntity> findByTipo(Integer tipo);
 }
 

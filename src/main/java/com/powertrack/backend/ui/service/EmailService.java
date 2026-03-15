@@ -1,7 +1,7 @@
 package com.powertrack.backend.ui.service;
 
 import jakarta.mail.internet.MimeMessage;
-import org.example.emailspring.common.Constantes;
+import com.powertrack.backend.common.Constantes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;

@@ -1,18 +1,18 @@
 package com.powertrack.backend.domain.service;
 
 
+import com.powertrack.backend.common.Constantes;
 import com.powertrack.backend.data.UsuarioRepository;
 import com.powertrack.backend.data.entity.UsuarioEntity;
 import com.powertrack.backend.domain.error.BadRequestException;
 import com.powertrack.backend.domain.mapper.UsuarioMapper;
+import com.powertrack.backend.domain.model.Rol;
 import com.powertrack.backend.domain.model.Usuario;
+import com.powertrack.backend.ui.dto.PerfilDTO;
 import com.powertrack.backend.ui.dto.UsuarioDTO;
+import com.powertrack.backend.ui.service.EmailService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import javax.crypto.SecretKey;
-import java.security.KeyPair;
-import java.security.PrivateKey;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -22,80 +22,93 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final UsuarioMapper usuarioMapper;
+    private final EmailService emailService;
+    private final RecomendacionService recomendacionService;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder,UsuarioMapper usuarioMapper) {
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder
+                                  passwordEncoder,
+                          UsuarioMapper usuarioMapper, EmailService emailService,
+                          RecomendacionService recomendacionService) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.usuarioMapper = usuarioMapper;
+        this.emailService = emailService;
+        this.recomendacionService = recomendacionService;
     }
 
-
-    public Usuario register(UsuarioDTO request) throws Exception {
-        KeyPair keyPair = asymmetricService.generateKeyPair();
-        byte[] salt = symmetricService.generateSalt();
-        byte[] iv = symmetricService.generateIV();
-        SecretKey keyDerivada = symmetricService.generateKeyFromPassword(request.password(), salt);
-
-        byte[] privKeyRaw = keyPair.getPrivate().getEncoded();
-        byte[] clavePrivCifrada = symmetricService.encrypt(privKeyRaw, keyDerivada, iv);
-
+    public Usuario register(UsuarioDTO request) {
         if (usuarioRepository.existsByUsername(request.username())) {
-            throw new IllegalArgumentException(Constantes.MSG_USERNAME_YA_EN_USO);
+            throw new BadRequestException(Constantes.MSG_USERNAME_YA_EN_USO);
         }
         if (usuarioRepository.existsByEmail(request.email())) {
-            throw new IllegalArgumentException(Constantes.MSG_EMAIL_YA_EN_USO);
+            throw new BadRequestException(Constantes.MSG_EMAIL_YA_EN_USO);
         }
 
         String codigoActivacion = UUID.randomUUID().toString();
         LocalDateTime expiracionCodigo = LocalDateTime.now().plusHours(48);
-        String hashedPassword = passwordEncoder.encode(request.password());
 
-        Usuario nuevoUsuario = new Usuario(
-                null,
-                request.username(),
-                hashedPassword,
-                request.email(),
-                request.nombre(),
-                request.rol(),
-                false,
-                codigoActivacion,
-                expiracionCodigo,
-                false,
-                null,
-                salt,
-                iv,
-                keyPair.getPublic().getEncoded(),
-                clavePrivCifrada
-        );
+        UsuarioEntity entity = new UsuarioEntity();
+        entity.setUsername(request.username());
+        entity.setPassword(passwordEncoder.encode(request.password()));
+        entity.setEmail(request.email());
+        entity.setNombre(request.nombre());
+        entity.setRol(Rol.USER);
+        entity.setActivo(false);
+        entity.setCodigoActivacion(codigoActivacion);
+        entity.setExpiracionCodigo(expiracionCodigo);
+        entity.setFormularioCompletado(false);
 
-        UsuarioEntity usuarioGuardado = usuarioRepository.save(usuarioMapper.toEntity(nuevoUsuario));
+        UsuarioEntity guardado = usuarioRepository.save(entity);
+        emailService.enviarEmailActivacion(guardado.getEmail(),
+                guardado.getNombre(), codigoActivacion);
 
-        emailService.enviarEmailActivacion(usuarioGuardado.getEmail(), usuarioGuardado.getNombre(),  codigoActivacion);
-
-        return usuarioMapper.toDomain(usuarioGuardado);
+        return usuarioMapper.toDomain(guardado);
     }
 
     public Usuario activarCuenta(String codigoActivacion) {
-        UsuarioEntity usuarioEntity = usuarioRepository.findByCodigoActivacion(codigoActivacion);
-        if (usuarioEntity == null) {
-            throw new BadRequestException(Constantes.CODIGO_DE_ACTIVACION_INVALIDO);
+        UsuarioEntity entity =
+                usuarioRepository.findByCodigoActivacion(codigoActivacion);
+        if (entity == null) {
+            throw new BadRequestException(Constantes.CODIGO_INVALIDO);
         }
-        if (usuarioEntity.getExpiracionCodigo() != null && usuarioEntity.getExpiracionCodigo().isBefore(LocalDateTime.now())) {
-            throw new BadRequestException(Constantes.EXPIRADO_CODIGO_DE_ACTIVACION);
+        if (entity.getExpiracionCodigo() != null &&
+                entity.getExpiracionCodigo().isBefore(LocalDateTime.now())) {
+            throw new BadRequestException(Constantes.CODIGO_EXPIRADO);
         }
 
-        usuarioEntity.setActivo(true);
-        usuarioEntity.setCodigoActivacion(null);
-        usuarioEntity.setExpiracionCodigo(null);
+        entity.setActivo(true);
+        entity.setCodigoActivacion(null);
+        entity.setExpiracionCodigo(null);
 
-        UsuarioEntity usuarioActualizado = usuarioRepository.save(usuarioEntity);
-        return usuarioMapper.toDomain(usuarioActualizado);
+        return usuarioMapper.toDomain(usuarioRepository.save(entity));
     }
 
-    public PrivateKey obtenerClavePrivadaDescifrada(UsuarioEntity usuario, String passwordPlana) throws Exception {
-        SecretKey keyDerivada = symmetricService.generateKeyFromPassword(passwordPlana, usuario.getSalt());
-        byte[] privKeyRaw = symmetricService.decrypt(usuario.getClavePrivada(), keyDerivada, usuario.getIv());
-        return asymmetricService.bytesToPrivateKey(privKeyRaw);
+    public Usuario completarPerfil(String username, PerfilDTO perfil) {
+        UsuarioEntity entity = usuarioRepository.findByUsername(username);
+        if (entity == null) {
+            throw new BadRequestException(Constantes.USUARIO_NO_ENCONTRADO +
+                    username);
+        }
+
+        entity.setGenero(perfil.genero());
+        entity.setEdad(perfil.edad());
+        entity.setObjetivo(perfil.objetivo());
+        entity.setNivel(perfil.nivel());
+        entity.setDiasEntrenamiento(perfil.diasEntrenamiento());
+        entity.setLesion(perfil.lesion());
+        entity.setPreferencia(perfil.preferencia());
+        entity.setRecomendacion(recomendacionService.calcular(perfil));
+        entity.setFormularioCompletado(true);
+
+        return usuarioMapper.toDomain(usuarioRepository.save(entity));
     }
 
+    public Usuario getByUsername(String username) {
+        UsuarioEntity entity = usuarioRepository.findByUsername(username);
+        if (entity == null) {
+            throw new BadRequestException(Constantes.USUARIO_NO_ENCONTRADO +
+                    username);
+        }
+        return usuarioMapper.toDomain(entity);
+    }
 }

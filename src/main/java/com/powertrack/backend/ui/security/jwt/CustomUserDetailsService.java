@@ -1,8 +1,8 @@
 package com.powertrack.backend.ui.security.jwt;
 
-import org.example.emailspring.common.Constantes;
-import org.example.emailspring.data.UsuarioRepository;
-import org.example.emailspring.data.entity.UsuarioEntity;
+import com.powertrack.backend.common.Constantes;
+import com.powertrack.backend.data.UsuarioRepository;
+import com.powertrack.backend.data.entity.UsuarioEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

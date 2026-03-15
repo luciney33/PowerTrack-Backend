@@ -4,10 +4,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.example.emailspring.common.Constantes;
-import org.example.emailspring.ui.service.JwtService;
-import org.example.emailspring.ui.service.TokenBlacklistService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.powertrack.backend.common.Constantes;
+import com.powertrack.backend.ui.service.JwtService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,13 +23,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
-    private final TokenBlacklistService tokenBlacklistService;
 
-    public JwtAuthenticationFilter(JwtService jwtService, @Lazy UserDetailsService userDetailsService,
-                                   @Autowired(required = false) TokenBlacklistService tokenBlacklistService) {
+    public JwtAuthenticationFilter(JwtService jwtService, @Lazy
+    UserDetailsService userDetailsService) {
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
-        this.tokenBlacklistService = tokenBlacklistService;
     }
 
     @Override
@@ -49,36 +45,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         try {
-            final String jwt = authHeader.substring(7);
-            if (jwt.isEmpty() || jwt.split("\\.").length < 2) {
-                filterChain.doFilter(request, response);
-                return;
-            }
-
-            if (tokenBlacklistService != null && tokenBlacklistService.isTokenRevoked(jwt)) {
-                logger.warn(Constantes.TOKEN_REVOCADO_INTENTANDO_ACCEDER);
-                filterChain.doFilter(request, response);
-                return;
-            }
-
+            final String jwt =
+                    authHeader.substring(Constantes.BEARER_PREFIX_LENGTH);
             final String username = jwtService.extractUsername(jwt);
 
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-
+            if (username != null &&
+                    SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails =
+                        userDetailsService.loadUserByUsername(username);
                 if (jwtService.isTokenValid(jwt, username)) {
-                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                            userDetails,
-                            null,
-                            userDetails.getAuthorities()
-                    );
+                    UsernamePasswordAuthenticationToken authToken =
+                            new UsernamePasswordAuthenticationToken(userDetails,
+                                    null, userDetails.getAuthorities());
+                    authToken.setDetails(new
+                            WebAuthenticationDetailsSource().buildDetails(request));
 
-                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }
         } catch (Exception e) {
-            logger.error(Constantes.ERROR_AL_PROCESAR_EL_TOKEN_JWT + e.getMessage());
+            logger.error(Constantes.ERROR_TOKEN_JWT + e.getMessage());
         }
 
         filterChain.doFilter(request, response);
