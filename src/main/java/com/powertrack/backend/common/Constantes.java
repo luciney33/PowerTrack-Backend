@@ -15,6 +15,9 @@ public class Constantes {
 
     // Roles
     public static final String ROLE = "ROLE_";
+    public static final String SECURITY_ROLE_USER = "hasRole('USER')";
+    public static final String SECURITY_ROLE_ADMIN = "hasRole('ADMIN')";
+
 
     // URL Paths - Security
     public static final String API = "/api/**";
