@@ -1,90 +1,93 @@
 package com.powertrack.backend.ui.controller;
-
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.example.emailspring.common.Constantes;
-import org.example.emailspring.domain.model.Entrenamiento;
-import org.example.emailspring.domain.service.EntrenamientoService;
-import org.example.emailspring.ui.security.IsAdmin;
-import org.example.emailspring.ui.security.IsUser;
+import com.powertrack.backend.common.Constantes;
+import com.powertrack.backend.domain.model.Rutina;
+import com.powertrack.backend.domain.model.Usuario;
+import com.powertrack.backend.domain.service.RutinaService;
+import com.powertrack.backend.domain.service.UsuarioService;
+import com.powertrack.backend.ui.dto.EjercicioResponseDTO;
+import com.powertrack.backend.ui.dto.RutinaResponseDTO;
+import com.powertrack.backend.ui.security.IsAdmin;
+import com.powertrack.backend.ui.security.IsUser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(Constantes.API_ENTRENAMIENTOS)
-@Tag(name = Constantes.TAG_ENTRENAMIENTOS, description = Constantes.TAG_ENTRENAMIENTOS_DESC)
-@SecurityRequirement(name = Constantes.SECURITY_SESSION_COOKIE_AUTH)
+@RequestMapping(Constantes.API_RUTINAS)
+@Tag(name = Constantes.TAG_RUTINAS, description = Constantes.TAG_RUTINAS_DESC)
 public class RutinaController {
 
-    private final EntrenamientoService entrenamientoService;
+    private final RutinaService rutinaService;
+    private final UsuarioService usuarioService;
 
-    public RutinaController(EntrenamientoService entrenamientoService) {
-        this.entrenamientoService = entrenamientoService;
+    public RutinaController(RutinaService rutinaService, UsuarioService usuarioService) {
+        this.rutinaService = rutinaService;
+        this.usuarioService = usuarioService;
     }
 
     @GetMapping
     @IsUser
-    @Operation(summary = Constantes.OP_LISTAR_ENTRENAMIENTOS, description = Constantes.OP_LISTAR_ENTRENAMIENTOS_DESC)
-    @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.RESP_LISTA_ENTRENAMIENTOS_RECUPERADA)
-    @ApiResponse(responseCode = Constantes.HTTP_401, description = Constantes.RESP_NO_AUTORIZADO, content = @Content(schema = @Schema(hidden = true)))
-    public ResponseEntity<List<Entrenamiento>> listar() {
-        return ResponseEntity.ok(entrenamientoService.getAll());
+    @Operation(summary = "Listar todas las rutinas")
+    public ResponseEntity<List<RutinaResponseDTO>> getAll() {
+        return ResponseEntity.ok(rutinaService.getAll().stream()
+                .map(this::toDTO).collect(Collectors.toList()));
     }
 
-    @GetMapping(Constantes.PATH_ID)
+    @GetMapping("/{id}")
     @IsUser
-    @Operation(summary = Constantes.OP_OBTENER_ENTRENAMIENTO, description = Constantes.OP_OBTENER_ENTRENAMIENTO_DESC)
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.RESP_ENTRENAMIENTO_ENCONTRADO),
-            @ApiResponse(responseCode = Constantes.HTTP_403, description = Constantes.RESP_ACCESO_DENEGADO_NO_ADMIN, content = @Content(schema = @Schema(hidden = true))),
-            @ApiResponse(responseCode = Constantes.HTTP_404, description = Constantes.NO_ENCONTRADO, content = @Content(schema = @Schema(hidden = true)))
-    })
-    public ResponseEntity<Entrenamiento> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(entrenamientoService.getById(id));
+    @Operation(summary = "Obtener rutina por ID")
+    public ResponseEntity<RutinaResponseDTO> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(toDTO(rutinaService.getById(id)));
+    }
+
+    @GetMapping(Constantes.RECOMENDADA)
+    @IsUser
+    @Operation(summary = "Obtener rutina recomendada para el usuario autenticado")
+    public ResponseEntity<RutinaResponseDTO> getRecomendada(@AuthenticationPrincipal UserDetails userDetails) {
+        Usuario usuario = usuarioService.getByUsername(userDetails.getUsername());
+        if (!usuario.formularioCompletado() || usuario.recomendacion() == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(toDTO(rutinaService.getByTipo(usuario.recomendacion())));
     }
 
     @PostMapping
     @IsAdmin
-    @Operation(summary = Constantes.OP_CREAR_ENTRENAMIENTO, description = Constantes.OP_USAR_ANOTACION_IS_ADMIN)
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = Constantes.HTTP_201, description = Constantes.RESP_ENTRENAMIENTO_CREADO),
-            @ApiResponse(responseCode = Constantes.HTTP_400, description = Constantes.RESP_DATOS_INVALIDOS, content = @Content(schema = @Schema(hidden = true))),
-            @ApiResponse(responseCode = Constantes.HTTP_403, description = Constantes.RESP_ACCESO_DENEGADO_NO_ADMIN, content = @Content(schema = @Schema(hidden = true)))
-    })
-    public ResponseEntity<Entrenamiento> crear(@RequestBody Entrenamiento entrenamiento) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(entrenamientoService.save(entrenamiento));
+    @Operation(summary = "Crear rutina (solo admin)")
+    public ResponseEntity<RutinaResponseDTO> save(@RequestBody RutinaResponseDTO request) {
+        Rutina nueva = new Rutina(null, request.nombre(), request.descripcion(), request.tipo(), List.of());
+        return ResponseEntity.status(HttpStatus.CREATED).body(toDTO(rutinaService.save(nueva)));
     }
 
-    @PutMapping(Constantes.PATH_ID)
+    @PutMapping("/{id}")
     @IsAdmin
-    @Operation(summary = Constantes.OP_ACTUALIZAR_ENTRENAMIENTO, description = Constantes.OP_USAR_ANOTACION_SECURED)
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.RESP_ENTRENAMIENTO_ACTUALIZADO),
-            @ApiResponse(responseCode = Constantes.HTTP_403, description = Constantes.RESP_ACCESO_DENEGADO_NO_ADMIN, content = @Content(schema = @Schema(hidden = true))),
-            @ApiResponse(responseCode = Constantes.HTTP_404, description = Constantes.NO_ENCONTRADO, content = @Content(schema = @Schema(hidden = true)))
-    })
-    public ResponseEntity<Entrenamiento> actualizar(@PathVariable Long id, @RequestBody Entrenamiento entrenamiento) {
-        return ResponseEntity.ok(entrenamientoService.update(id, entrenamiento));
+    @Operation(summary = "Actualizar rutina (solo admin)")
+    public ResponseEntity<RutinaResponseDTO> update(@PathVariable Long id,
+                                                    @RequestBody RutinaResponseDTO request) {
+        Rutina actualizada = new Rutina(id, request.nombre(), request.descripcion(), request.tipo(), List.of());
+        return ResponseEntity.ok(toDTO(rutinaService.update(id, actualizada)));
     }
 
-    @DeleteMapping(Constantes.PATH_ID)
+    @DeleteMapping("/{id}")
     @IsAdmin
-    @Operation(summary = Constantes.OP_ELIMINAR_ENTRENAMIENTO, description = Constantes.OP_USAR_ANOTACION_ROLES_ALLOWED)
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = Constantes.HTTP_204, description = Constantes.RESP_ENTRENAMIENTO_ELIMINADO),
-            @ApiResponse(responseCode = Constantes.HTTP_403, description = Constantes.RESP_ACCESO_DENEGADO_NO_ADMIN, content = @Content(schema = @Schema(hidden = true))),
-            @ApiResponse(responseCode = Constantes.HTTP_404, description = Constantes.NO_ENCONTRADO, content = @Content(schema = @Schema(hidden = true)))
-    })
-    public ResponseEntity<Void> borrar(@PathVariable Long id) {
-        entrenamientoService.delete(id);
+    @Operation(summary = "Eliminar rutina (solo admin)")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        rutinaService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    private RutinaResponseDTO toDTO(Rutina r) {
+        List<EjercicioResponseDTO> ejercicios = r.ejercicios().stream()
+                .map(e -> new EjercicioResponseDTO(e.id(), e.nombre(), e.tipoEntrenamiento(),
+                        e.imagenUrl(), e.descripcion()))
+                .collect(Collectors.toList());
+        return new RutinaResponseDTO(r.id(), r.nombre(), r.descripcion(), r.tipo(), ejercicios);
     }
 }

@@ -1,6 +1,7 @@
 package com.powertrack.backend.ui.security;
 
-import org.example.emailspring.common.Constantes;
+import com.powertrack.backend.
+common.Constantes;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.lang.annotation.ElementType;

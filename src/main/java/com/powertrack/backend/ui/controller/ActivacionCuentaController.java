@@ -1,11 +1,10 @@
 package com.powertrack.backend.ui.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.example.emailspring.common.Constantes;
-import org.example.emailspring.domain.model.Usuario;
-import org.example.emailspring.ui.service.AuthService;
+import com.powertrack.backend.common.Constantes;
+import com.powertrack.backend.domain.model.Usuario;
+import com.powertrack.backend.ui.service.AuthService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping(Constantes.API_ACTIVAR)
-@Tag(name = Constantes.TAG_ACTIVACION_CUENTA, description = Constantes.TAG_ACTIVACION_CUENTA_DESC)
+@Tag(name = Constantes.TAG_ACTIVACION, description = Constantes.TAG_ACTIVACION_DESC)
 public class ActivacionCuentaController {
     private final AuthService authService;
 
@@ -24,13 +23,11 @@ public class ActivacionCuentaController {
 
 
     @GetMapping
-    @Operation(summary = Constantes.OP_ACTIVAR_CUENTA, description = Constantes.OP_ACTIVAR_CUENTA_DESC)
-    public String template(@Parameter(description = Constantes.PARAM_CODIGO_ACTIVACION_DESC) @RequestParam(Constantes.CODIGO) String codigoActivacion, Model model) {
-
+    @Operation(summary = "Activar cuenta de usuario")
+    public String activar(@RequestParam(Constantes.CODIGO) String
+                                  codigoActivacion, Model model) {
         Usuario usuario = authService.activarCuenta(codigoActivacion);
-
         model.addAttribute(Constantes.NOMBRE_USUARIO, usuario.nombre());
-
         return Constantes.TEMPLATE;
     }
 }
