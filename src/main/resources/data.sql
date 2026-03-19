@@ -72,3 +72,72 @@ INSERT IGNORE INTO usuarios (username, password, email, nombre, rol, activo, for
   ('Frutos secos', 200, 6, 8, 16, 'MERIENDA'),
   ('Barrita de proteínas', 220, 20, 22, 7, 'MERIENDA'),
   ('Queso fresco con miel', 180, 12, 18, 5, 'MERIENDA');
+
+-- Rutina 0: Volumen Principiante → ejercicios básicos
+INSERT IGNORE INTO rutina_ejercicios (rutina_id, ejercicio_id) VALUES
+(1, 1), -- Press de banca
+(1, 9), -- Sentadilla
+(1, 16), -- Curl de bíceps
+(1, 18), -- Extensión de tríceps
+(1, 13), -- Press militar
+(1, 20); -- Plancha
+
+-- Rutina 1: Volumen Intermedio
+INSERT IGNORE INTO rutina_ejercicios (rutina_id, ejercicio_id) VALUES
+(2, 1), (2, 2), (2, 5), (2, 6), (2, 9), (2, 10), (2, 13), (2, 16);
+
+-- Rutina 2: Volumen Avanzado
+INSERT IGNORE INTO rutina_ejercicios (rutina_id, ejercicio_id) VALUES
+(3, 1), (3, 2), (3, 3), (3, 5), (3, 6), (3, 7), (3, 9), (3, 10), (3, 11), (3, 13), (3, 14);
+
+-- Rutina 3: Definición Principiante
+INSERT IGNORE INTO rutina_ejercicios (rutina_id, ejercicio_id) VALUES
+(4, 22), (4, 9), (4, 20), (4, 21), (4, 16);
+
+-- Rutina 4: Definición Intermedio (HIIT)
+INSERT IGNORE INTO rutina_ejercicios (rutina_id, ejercicio_id) VALUES
+(5, 23), (5, 9), (5, 11), (5, 20), (5, 21), (5, 22);
+
+-- Rutina 5: Mantenimiento
+INSERT IGNORE INTO rutina_ejercicios (rutina_id, ejercicio_id) VALUES
+(6, 1), (6, 9), (6, 13), (6, 22), (6, 20), (6, 24);
+
+-- Rutina 6: Pérdida de peso
+INSERT IGNORE INTO rutina_ejercicios (rutina_id, ejercicio_id) VALUES
+(7, 22), (7, 23), (7, 9), (7, 11), (7, 20), (7, 21);
+
+-- Rutina 7: Rehabilitación
+INSERT IGNORE INTO rutina_ejercicios (rutina_id, ejercicio_id) VALUES
+(8, 24), (8, 20), (8, 11), (8, 21);
+
+-- Plan 0: Superávit Principiante
+INSERT IGNORE INTO plan_comidas (plan_id, comida_id) VALUES
+(1, 1), (1, 5), (1, 6), (1, 16), (1, 11), (1, 18);
+
+-- Plan 1: Superávit Intermedio
+INSERT IGNORE INTO plan_comidas (plan_id, comida_id) VALUES
+(2, 2), (2, 5), (2, 7), (2, 17), (2, 11), (2, 18);
+
+-- Plan 2: Superávit Avanzado
+INSERT IGNORE INTO plan_comidas (plan_id, comida_id) VALUES
+(3, 5), (3, 6), (3, 7), (3, 10), (3, 18), (3, 11);
+
+-- Plan 3: Déficit Principiante
+INSERT IGNORE INTO plan_comidas (plan_id, comida_id) VALUES
+(4, 3), (4, 8), (4, 15), (4, 16), (4, 13);
+
+-- Plan 4: Déficit Intermedio
+INSERT IGNORE INTO plan_comidas (plan_id, comida_id) VALUES
+(5, 3), (5, 9), (5, 12), (5, 16), (5, 13);
+
+-- Plan 5: Mantenimiento
+INSERT IGNORE INTO plan_comidas (plan_id, comida_id) VALUES
+(6, 1), (6, 6), (6, 11), (6, 16), (6, 14);
+
+-- Plan 6: Pérdida de peso
+INSERT IGNORE INTO plan_comidas (plan_id, comida_id) VALUES
+(7, 3), (7, 15), (7, 12), (7, 16), (7, 14);
+
+-- Plan 7: Rehabilitación
+INSERT IGNORE INTO plan_comidas (plan_id, comida_id) VALUES
+(8, 1), (8, 8), (8, 13), (8, 16), (8, 15);
