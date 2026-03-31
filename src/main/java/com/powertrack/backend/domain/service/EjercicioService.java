@@ -42,6 +42,13 @@ public class EjercicioService {
                         BadRequestException(Constantes.EJERCICIO_NO_ENCONTRADO));
     }
 
+    public List<Ejercicio> getByCategoria(String categoria) {
+        return ejercicioRepository.findByTipoEntrenamiento(categoria.toUpperCase())
+                .stream()
+                .map(ejercicioMapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
     public Ejercicio save(Ejercicio ejercicio) {
         EjercicioEntity entity = new EjercicioEntity();
         entity.setNombre(ejercicio.nombre());

@@ -32,12 +32,25 @@ public class EjercicioController {
                 .map(this::toDTO).collect(Collectors.toList()));
     }
 
+    @GetMapping(Constantes.CATEGORIA_PATH)
+    @IsUser
+    @Operation(summary = "Listar ejercicios por categoría")
+    public ResponseEntity<List<EjercicioResponseDTO>> getByCategoria(
+            @PathVariable String categoria) {
+        return ResponseEntity.ok(ejercicioService.getByCategoria(categoria)
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList()));
+    }
+
+
     @GetMapping("/{id}")
     @IsUser
     @Operation(summary = "Obtener ejercicio por ID")
     public ResponseEntity<EjercicioResponseDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(toDTO(ejercicioService.getById(id)));
     }
+
 
     @PostMapping
     @IsAdmin

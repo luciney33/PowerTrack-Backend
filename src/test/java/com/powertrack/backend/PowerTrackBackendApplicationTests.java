@@ -1,13 +1,18 @@
 package com.powertrack.backend;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import com.powertrack.backend.service.*;
+import org.junit.platform.suite.api.SelectClasses;
+import org.junit.platform.suite.api.Suite;
 
-@SpringBootTest
+@Suite
+@SelectClasses({
+        RecomendacionServiceTest.class,
+        UsuarioServiceTest.class,
+        EjercicioServiceTest.class,
+        ComidaServiceTest.class,
+        RutinaServiceTest.class,
+        PlanNutricionalServiceTest.class,
+        RegistroEntrenamientoServiceTest.class
+})
 class PowerTrackBackendApplicationTests {
-
-    @Test
-    void contextLoads() {
-    }
-
 }
