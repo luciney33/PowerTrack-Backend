@@ -35,7 +35,7 @@ public class PlanNutricionalService {
     }
 
     public PlanNutricional getByTipo(Integer tipo) {
-        return planRepository.findByTipo(tipo)
+        return planRepository.findFirstByTipo(tipo)
                 .map(mapper::toDomain)
                 .orElseThrow(() -> new BadRequestException(Constantes.PLAN_NO_ENCONTRADO));
     }

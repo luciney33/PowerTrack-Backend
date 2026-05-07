@@ -32,4 +32,16 @@ public class RegistroDetalleEntity {
 
     @Column(nullable = false)
     private Double peso;
+
+    @Column(nullable = true)
+    private Integer duracionMinutos;
+
+    @Column(nullable = true)
+    private Double velocidad;
+
+    @Column(nullable = true)
+    private Double inclinacion;
+
+    @Column(nullable = true)
+    private Integer kcalGastadas;
 }

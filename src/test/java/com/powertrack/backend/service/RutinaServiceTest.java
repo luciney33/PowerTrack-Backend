@@ -96,7 +96,7 @@ public class RutinaServiceTest {
         entity.setTipo(3);
         Rutina rutina = new Rutina(1L, "Rutina Cardio", "Descripción", 3, List.of());
 
-        when(rutinaRepository.findByTipo(3)).thenReturn(Optional.of(entity));
+        when(rutinaRepository.findFirstByTipo(3)).thenReturn(Optional.of(entity));
         when(rutinaMapper.toDomain(entity)).thenReturn(rutina);
 
         Rutina resultado = rutinaService.getByTipo(3);
@@ -107,7 +107,7 @@ public class RutinaServiceTest {
 
     @Test
     void deberiaLanzarExcepcionCuandoTipoNoExiste() {
-        when(rutinaRepository.findByTipo(99)).thenReturn(Optional.empty());
+        when(rutinaRepository.findFirstByTipo(99)).thenReturn(Optional.empty());
 
         BadRequestException ex = assertThrows(BadRequestException.class,
                 () -> rutinaService.getByTipo(99));

@@ -59,6 +59,15 @@ public class UsuarioEntity {
 
     private Integer recomendacion;
 
+    @Column(name = "peso_cat")
+    private Integer pesoCat;
+
     @Column(name = "formulario_completado", nullable = false)
     private boolean formularioCompletado = false;
+
+    @Column(columnDefinition = "TEXT")
+    private String descripcionRutina;
+
+    @Column(columnDefinition = "TEXT")
+    private String consejosNutricion;
 }

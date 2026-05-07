@@ -31,7 +31,10 @@ public class UsuarioMapper {
                 entity.getLesion(),
                 entity.getPreferencia(),
                 entity.getRecomendacion(),
-                entity.isFormularioCompletado()
+                entity.getPesoCat(),
+                entity.isFormularioCompletado(),
+                entity.getDescripcionRutina(),
+                entity.getConsejosNutricion()
         );
     }
 
@@ -55,7 +58,10 @@ public class UsuarioMapper {
         entity.setLesion(u.lesion());
         entity.setPreferencia(u.preferencia());
         entity.setRecomendacion(u.recomendacion());
+        entity.setPesoCat(u.pesoCat());
         entity.setFormularioCompletado(u.formularioCompletado());
+        entity.setDescripcionRutina(u.descripcionRutina());
+        entity.setConsejosNutricion(u.consejosNutricion());
         return entity;
     }
 }

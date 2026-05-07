@@ -9,5 +9,7 @@ public record UsuarioResponseDTO(
         String nombre,
         Rol rol,
         boolean formularioCompletado,
-        Integer recomendacion) {
+        Integer recomendacion,
+        String descripcionRutina,
+        String consejosNutricion) {
 }

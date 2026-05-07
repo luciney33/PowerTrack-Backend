@@ -22,5 +22,8 @@ public record Usuario(
         Integer lesion,
         Integer preferencia,
         Integer recomendacion,
-        boolean formularioCompletado
+        Integer pesoCat,
+        boolean formularioCompletado,
+        String descripcionRutina,
+        String consejosNutricion
 ) {}

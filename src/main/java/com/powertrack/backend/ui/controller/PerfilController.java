@@ -27,8 +27,7 @@ public class PerfilController {
     @GetMapping
     @IsUser
     @Operation(summary = "Ver perfil del usuario autenticado")
-    public ResponseEntity<UsuarioResponseDTO> getPerfil(@AuthenticationPrincipal
-                                                        UserDetails userDetails) {
+    public ResponseEntity<UsuarioResponseDTO> getPerfil(@AuthenticationPrincipal UserDetails userDetails) {
         Usuario usuario =
                 usuarioService.getByUsername(userDetails.getUsername());
         return ResponseEntity.ok(toResponseDTO(usuario));
@@ -49,6 +48,6 @@ public class PerfilController {
     private UsuarioResponseDTO toResponseDTO(Usuario u) {
         return new UsuarioResponseDTO(u.id(), u.username(), u.email(),
                 u.nombre(),
-                u.rol(), u.formularioCompletado(), u.recomendacion());
+                u.rol(), u.formularioCompletado(), u.recomendacion(), u.descripcionRutina(), u.consejosNutricion());
     }
 }

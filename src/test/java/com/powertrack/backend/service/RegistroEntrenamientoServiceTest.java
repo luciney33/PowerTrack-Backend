@@ -121,7 +121,7 @@ public class RegistroEntrenamientoServiceTest {
 
     @Test
     void deberiaGuardarRegistroConRutinaYDetalles() {
-        RegistroDetalleDTO detalleDTO = new RegistroDetalleDTO(1L, 3, 10, 50.0);
+        RegistroDetalleDTO detalleDTO = new RegistroDetalleDTO(1L, 3, 10, 50.0, null, null, null, null);
         RegistroEntrenamientoDTO dto = new RegistroEntrenamientoDTO(5L, LocalDate.now(), "Sesión dura", List.of(detalleDTO));
         UsuarioEntity usuario = new UsuarioEntity();
         usuario.setUsername("lucia");
@@ -195,7 +195,7 @@ public class RegistroEntrenamientoServiceTest {
 
     @Test
     void deberiaLanzarExcepcionAlGuardarSiEjercicioNoExiste() {
-        RegistroDetalleDTO detalleDTO = new RegistroDetalleDTO(99L, 3, 10, 50.0);
+        RegistroDetalleDTO detalleDTO = new RegistroDetalleDTO(99L, 3, 10, 50.0, null, null, null, null);
         RegistroEntrenamientoDTO dto = new RegistroEntrenamientoDTO(null, LocalDate.now(), "Obs", List.of(detalleDTO));
         UsuarioEntity usuario = new UsuarioEntity();
         usuario.setUsername("lucia");

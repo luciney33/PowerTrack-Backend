@@ -4,5 +4,9 @@ public record RegistroDetalleDTO(
         Long ejercicioId,
         Integer series,
         Integer repeticiones,
-        Double peso
+        Double peso,
+        Integer duracionMinutos,
+        Double velocidad,
+        Double inclinacion,
+        Integer kcalGastadas
 ) {}

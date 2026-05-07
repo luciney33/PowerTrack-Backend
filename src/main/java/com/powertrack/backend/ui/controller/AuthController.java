@@ -37,8 +37,7 @@ public class AuthController {
 
     @PostMapping(Constantes.AUTH_REGISTER)
     @Operation(summary = "Registrar nuevo usuario")
-    public ResponseEntity<UsuarioResponseDTO> register(@RequestBody UsuarioDTO
-                                                               request) {
+    public ResponseEntity<UsuarioResponseDTO> register(@RequestBody UsuarioDTO request) {
         Usuario usuario = authService.register(request);
         return
                 ResponseEntity.status(HttpStatus.CREATED).body(toResponseDTO(usuario));
@@ -46,8 +45,7 @@ public class AuthController {
 
     @PostMapping(Constantes.REFRESH_ENDPOINT)
     @Operation(summary = "Refrescar access token")
-    public ResponseEntity<LoginResponse> refresh(@RequestBody RefreshTokenRequest
-                                                         request) {
+    public ResponseEntity<LoginResponse> refresh(@RequestBody RefreshTokenRequest request) {
         JwtTokenPair tokens =
                 authService.refreshAccessToken(request.refreshToken(), request.accessToken());
         Usuario usuario = authService.getUserFromToken(tokens.accessToken());
@@ -67,6 +65,6 @@ public class AuthController {
 
     private UsuarioResponseDTO toResponseDTO(Usuario u) {
         return new UsuarioResponseDTO(u.id(), u.username(), u.email(),
-                u.nombre(), u.rol(), u.formularioCompletado(), u.recomendacion());
+                u.nombre(), u.rol(), u.formularioCompletado(), u.recomendacion(), u.descripcionRutina(), u.consejosNutricion());
     }
 }

@@ -65,7 +65,7 @@ public class EjercicioController {
     @IsAdmin
     @Operation(summary = "Actualizar ejercicio (solo admin)")
     public ResponseEntity<EjercicioResponseDTO> update(@PathVariable Long id,
-                                                       @RequestBody EjercicioResponseDTO request) {
+            @RequestBody EjercicioResponseDTO request) {
         Ejercicio actualizado = new Ejercicio(id, request.nombre(), request.tipoEntrenamiento(),
                 request.imagenUrl(), request.descripcion());
         return ResponseEntity.ok(toDTO(ejercicioService.update(id, actualizado)));

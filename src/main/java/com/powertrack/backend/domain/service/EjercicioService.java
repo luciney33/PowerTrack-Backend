@@ -1,19 +1,12 @@
 package com.powertrack.backend.domain.service;
 
 import com.powertrack.backend.common.Constantes;
-import com.powertrack.backend
-
-.data.EjercicioRepository;
+import com.powertrack.backend.data.EjercicioRepository;
 import com.powertrack.backend.data.entity.EjercicioEntity;
 import com.powertrack.backend.domain.error.BadRequestException;
-import com.powertrack.backend
-
-.domain.mapper.EjercicioMapper;
-import com.powertrack.backend
-
-.domain.model.Ejercicio;
+import com.powertrack.backend.domain.mapper.EjercicioMapper;
+import com.powertrack.backend.domain.model.Ejercicio;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;

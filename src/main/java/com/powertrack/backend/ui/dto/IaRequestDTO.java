@@ -1,12 +1,12 @@
 package com.powertrack.backend.ui.dto;
 
-public record PerfilDTO(
+public record IaRequestDTO(
         Integer genero,
         Integer edad,
         Integer objetivo,
         Integer nivel,
-        Integer diasEntrenamiento,
+        Integer dias,
         Integer lesion,
-        Integer preferencia,
-        Integer pesoCat
+        Integer pref,
+        Integer peso_cat
 ) {}

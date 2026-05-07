@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 @Repository
 public interface PlanNutricionalRepository extends JpaRepository<PlanNutricionalEntity, Long> {
-    Optional<PlanNutricionalEntity> findByTipo(Integer tipo);
+    Optional<PlanNutricionalEntity> findFirstByTipo(Integer tipo);
 }

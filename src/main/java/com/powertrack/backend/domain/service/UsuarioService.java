@@ -24,16 +24,18 @@ public class UsuarioService {
     private final UsuarioMapper usuarioMapper;
     private final EmailService emailService;
     private final RecomendacionService recomendacionService;
+    private final GeminiService geminiService;
 
     public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder
                                   passwordEncoder,
                           UsuarioMapper usuarioMapper, EmailService emailService,
-                          RecomendacionService recomendacionService) {
+                          RecomendacionService recomendacionService, GeminiService geminiService) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.usuarioMapper = usuarioMapper;
         this.emailService = emailService;
         this.recomendacionService = recomendacionService;
+        this.geminiService = geminiService;
     }
 
     public Usuario register(UsuarioDTO request) {
@@ -97,8 +99,31 @@ public class UsuarioService {
         entity.setDiasEntrenamiento(perfil.diasEntrenamiento());
         entity.setLesion(perfil.lesion());
         entity.setPreferencia(perfil.preferencia());
+        entity.setPesoCat(perfil.pesoCat());
         entity.setRecomendacion(recomendacionService.calcular(perfil));
         entity.setFormularioCompletado(true);
+
+        String descripcionRutina = null;
+        String consejosNutricion = null;
+
+        try {
+            descripcionRutina = geminiService.generarDescripcionRutina(
+                    perfil.objetivo(), perfil.nivel(),
+                    perfil.diasEntrenamiento(),
+                    perfil.lesion() != null ? perfil.lesion() : 0
+            );
+            consejosNutricion = geminiService.generarConsejosNutricion(
+                    perfil.objetivo(),
+                    perfil.genero() != null ? perfil.genero() : 0,
+                    perfil.edad() != null ? perfil.edad() : 0
+            );
+        } catch (Exception e) {
+            System.err.println("Error al generar contenido con Gemini: " +
+                    e.getMessage());
+        }
+
+        entity.setDescripcionRutina(descripcionRutina);
+        entity.setConsejosNutricion(consejosNutricion);
 
         return usuarioMapper.toDomain(usuarioRepository.save(entity));
     }

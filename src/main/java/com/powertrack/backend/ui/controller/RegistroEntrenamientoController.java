@@ -76,6 +76,6 @@ public class RegistroEntrenamientoController {
     private RegistroDetalleResponseDTO detalleToDTO(RegistroDetalle d) {
         EjercicioResponseDTO eDTO = new EjercicioResponseDTO(d.ejercicio().id(), d.ejercicio().nombre(),
                 d.ejercicio().tipoEntrenamiento(), d.ejercicio().imagenUrl(), d.ejercicio().descripcion());
-        return new RegistroDetalleResponseDTO(d.id(), eDTO, d.series(), d.repeticiones(), d.peso());
+        return new RegistroDetalleResponseDTO(d.id(), eDTO, d.series(), d.repeticiones(), d.peso(), d.duracionMinutos(), d.velocidad(), d.inclinacion(), d.kcalGastadas());
     }
 }

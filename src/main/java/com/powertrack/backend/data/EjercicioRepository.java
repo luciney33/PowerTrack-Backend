@@ -1,8 +1,6 @@
 package com.powertrack.backend.data;
 
-import com.powertrack.backend
-
-.data.entity.EjercicioEntity;
+import com.powertrack.backend.data.entity.EjercicioEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

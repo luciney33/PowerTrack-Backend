@@ -94,7 +94,7 @@ public class PlanNutricionalServiceTest {
         entity.setTipo(2);
         PlanNutricional planEsperado = new PlanNutricional(1L, "Plan Definicion", "Desc", 2, 2000, 160.0, 200.0, 60.0, List.of());
 
-        when(planRepository.findByTipo(2)).thenReturn(Optional.of(entity));
+        when(planRepository.findFirstByTipo(2)).thenReturn(Optional.of(entity));
         when(mapper.toDomain(entity)).thenReturn(planEsperado);
 
         PlanNutricional resultado = planNutricionalService.getByTipo(2);
@@ -105,7 +105,7 @@ public class PlanNutricionalServiceTest {
 
     @Test
     void deberiaLanzarExcepcionCuandoTipoNoExiste() {
-        when(planRepository.findByTipo(99)).thenReturn(Optional.empty());
+        when(planRepository.findFirstByTipo(99)).thenReturn(Optional.empty());
 
         BadRequestException ex = assertThrows(BadRequestException.class,
                 () -> planNutricionalService.getByTipo(99));

@@ -11,6 +11,9 @@ import java.util.Optional;
 
 @Repository
 public interface RutinaRepository extends JpaRepository<RutinaEntity, Long> {
-    Optional<RutinaEntity> findByTipo(Integer tipo);
+
+    Optional<RutinaEntity> findFirstByTipo(Integer tipo);
+
+
 }
 

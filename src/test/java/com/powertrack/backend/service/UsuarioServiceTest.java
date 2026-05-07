@@ -48,7 +48,7 @@ public class UsuarioServiceTest {
         entidadGuardada.setNombre("Lucia");
         Usuario usuarioEsperado = new Usuario(1L, "lucia", "encoded", "lucia@email.com",
                 "Lucia", Rol.USER, false, null, null,
-                null, null, null, null, null, null, null, null, false);
+                null, null, null, null, null, null, null, null, null, false, null, null);
 
         when(usuarioRepository.existsByUsername("lucia")).thenReturn(false);
         when(usuarioRepository.existsByEmail("lucia@email.com")).thenReturn(false);
@@ -68,9 +68,9 @@ public class UsuarioServiceTest {
     void deberiaCodificarPasswordAlRegistrar() {
         UsuarioDTO dto = new UsuarioDTO("lucia", "pass123", "lucia@email.com", "Lucia");
         UsuarioEntity entidadGuardada = new UsuarioEntity();
-        Usuario usuarioEsperado = new Usuario(1L, "lucia", "encoded", "lucia@email.com",
+        Usuario usuarioEsperado =  new Usuario(1L, "lucia", "encoded", "lucia@email.com",
                 "Lucia", Rol.USER, false, null, null,
-                null, null, null, null, null, null, null, null, false);
+                null, null, null, null, null, null, null, null, null, false, null, null);
 
         when(usuarioRepository.existsByUsername(anyString())).thenReturn(false);
         when(usuarioRepository.existsByEmail(anyString())).thenReturn(false);
@@ -122,7 +122,7 @@ public class UsuarioServiceTest {
         UsuarioEntity guardada = new UsuarioEntity();
         Usuario usuarioEsperado = new Usuario(1L, "lucia", "encoded", "lucia@email.com",
                 "Lucia", Rol.USER, true, null, null,
-                null, null, null, null, null, null, null, null, false);
+                null, null, null, null, null, null, null, null, null, false, null, null);
 
         when(usuarioRepository.findByCodigoActivacion("codigo-abc")).thenReturn(entity);
         when(usuarioRepository.save(entity)).thenReturn(guardada);
@@ -145,7 +145,7 @@ public class UsuarioServiceTest {
         UsuarioEntity guardada = new UsuarioEntity();
         Usuario usuarioEsperado = new Usuario(1L, "lucia", "encoded", "lucia@email.com",
                 "Lucia", Rol.USER, true, null, null,
-                null, null, null, null, null, null, null, null, false);
+                null, null, null, null, null, null, null, null, null, false, null, null);
 
         when(usuarioRepository.findByCodigoActivacion("codigo-sin-expiracion")).thenReturn(entity);
         when(usuarioRepository.save(entity)).thenReturn(guardada);
@@ -183,12 +183,12 @@ public class UsuarioServiceTest {
 
     @Test
     void deberiaCompletarPerfilCuandoUsuarioExiste() {
-        PerfilDTO perfil = new PerfilDTO(1, 25, 1, 2, 3, null, 0);
+        PerfilDTO perfil = new PerfilDTO(1, 25, 1, 2, 3, null,2, 65);
         UsuarioEntity entity = new UsuarioEntity();
         UsuarioEntity guardada = new UsuarioEntity();
         Usuario usuarioEsperado = new Usuario(1L, "lucia", "encoded", "lucia@email.com",
                 "Lucia", Rol.USER, true, null, null,
-                1, 25, 1, 2, 3, null, 0, 4, true);
+                1, 25, 1, 2, 3, null, 0, 4, 65, false, null, null);
 
         when(usuarioRepository.findByUsername("lucia")).thenReturn(entity);
         when(recomendacionService.calcular(perfil)).thenReturn(4);
@@ -206,7 +206,7 @@ public class UsuarioServiceTest {
 
     @Test
     void deberiaLlamarARecomendacionServiceAlCompletarPerfil() {
-        PerfilDTO perfil = new PerfilDTO(null, null, 2, 0, null, null, null);
+        PerfilDTO perfil = new PerfilDTO(null, null, 2, 0, null, null, null,65);
         UsuarioEntity entity = new UsuarioEntity();
         UsuarioEntity guardada = new UsuarioEntity();
 
@@ -222,7 +222,7 @@ public class UsuarioServiceTest {
 
     @Test
     void deberiaLanzarExcepcionAlCompletarPerfilSiUsuarioNoExiste() {
-        PerfilDTO perfil = new PerfilDTO(null, null, 1, 0, null, null, null);
+        PerfilDTO perfil = new PerfilDTO(null, null, 1, 0, null, null, null,65);
 
         when(usuarioRepository.findByUsername("noexiste")).thenReturn(null);
 
@@ -240,7 +240,7 @@ public class UsuarioServiceTest {
         entity.setUsername("lucia");
         Usuario usuarioEsperado = new Usuario(1L, "lucia", "encoded", "lucia@email.com",
                 "Lucia", Rol.USER, true, null, null,
-                null, null, null, null, null, null, null, null, false);
+                null, null, null, null, null, null, null, null, null, false, null, null);
 
         when(usuarioRepository.findByUsername("lucia")).thenReturn(entity);
         when(usuarioMapper.toDomain(entity)).thenReturn(usuarioEsperado);

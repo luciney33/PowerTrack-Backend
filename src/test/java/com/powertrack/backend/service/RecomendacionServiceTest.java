@@ -19,7 +19,7 @@ public class RecomendacionServiceTest {
 
     @Test
     void deberiaRetornar7CuandoHayLesion() {
-        PerfilDTO perfil = new PerfilDTO(null, null, 1, 0, null, 5, null);
+        PerfilDTO perfil = new PerfilDTO(null, null, 1, 0, null, 5, null, null);
 
         int resultado = recomendacionService.calcular(perfil);
 
@@ -28,7 +28,7 @@ public class RecomendacionServiceTest {
 
     @Test
     void deberiaRetornar0CuandoObjetivo0YNivel0() {
-        PerfilDTO perfil = new PerfilDTO(null, null, 0, 0, null, null, null);
+        PerfilDTO perfil = new PerfilDTO(null, null, 0, 0, null, null, null, null);
 
         int resultado = recomendacionService.calcular(perfil);
 
@@ -37,7 +37,7 @@ public class RecomendacionServiceTest {
 
     @Test
     void deberiaRetornar1CuandoObjetivo0YNivel1() {
-        PerfilDTO perfil = new PerfilDTO(null, null, 0, 1, null, null, null);
+        PerfilDTO perfil = new PerfilDTO(null, null, 0, 1, null, null, null, null);
 
         int resultado = recomendacionService.calcular(perfil);
 
@@ -46,7 +46,7 @@ public class RecomendacionServiceTest {
 
     @Test
     void deberiaRetornar2CuandoObjetivo0YNivel2() {
-        PerfilDTO perfil = new PerfilDTO(null, null, 0, 2, null, null, null);
+        PerfilDTO perfil = new PerfilDTO(null, null, 0, 2, null, null, null, null);
 
         int resultado = recomendacionService.calcular(perfil);
 
@@ -55,7 +55,7 @@ public class RecomendacionServiceTest {
 
     @Test
     void deberiaRetornar3CuandoObjetivo1YNivel0() {
-        PerfilDTO perfil = new PerfilDTO(null, null, 1, 0, null, null, null);
+        PerfilDTO perfil = new PerfilDTO(null, null, 1, 0, null, null, null, null);
 
         int resultado = recomendacionService.calcular(perfil);
 
@@ -64,7 +64,7 @@ public class RecomendacionServiceTest {
 
     @Test
     void deberiaRetornar3CuandoObjetivo1YNivel1() {
-        PerfilDTO perfil = new PerfilDTO(null, null, 1, 1, null, null, null);
+        PerfilDTO perfil = new PerfilDTO(null, null, 1, 1, null, null, null, null);
 
         int resultado = recomendacionService.calcular(perfil);
 
@@ -73,7 +73,7 @@ public class RecomendacionServiceTest {
 
     @Test
     void deberiaRetornar4CuandoObjetivo1YNivel2() {
-        PerfilDTO perfil = new PerfilDTO(null, null, 1, 2, null, null, null);
+        PerfilDTO perfil = new PerfilDTO(null, null, 1, 2, null, null, null, null);
 
         int resultado = recomendacionService.calcular(perfil);
 
@@ -82,7 +82,7 @@ public class RecomendacionServiceTest {
 
     @Test
     void deberiaRetornar5CuandoObjetivo2() {
-        PerfilDTO perfil = new PerfilDTO(null, null, 2, 0, null, null, null);
+        PerfilDTO perfil = new PerfilDTO(null, null, 2, 0, null, null, null, null);
 
         int resultado = recomendacionService.calcular(perfil);
 
@@ -91,7 +91,7 @@ public class RecomendacionServiceTest {
 
     @Test
     void deberiaRetornar6CuandoObjetivo3() {
-        PerfilDTO perfil = new PerfilDTO(null, null, 3, 0, null, null, null);
+        PerfilDTO perfil = new PerfilDTO(null, null, 3, 0, null, null, null, null);
 
         int resultado = recomendacionService.calcular(perfil);
 
@@ -101,7 +101,7 @@ public class RecomendacionServiceTest {
 
     @Test
     void deberiaRetornar0CuandoLesionEsCero() {
-        PerfilDTO perfil = new PerfilDTO(null, null, 0, 0, null, 0, null);
+        PerfilDTO perfil = new PerfilDTO(null, null, 0, 0, null, 0, null, null);
 
         int resultado = recomendacionService.calcular(perfil);
 
@@ -111,7 +111,7 @@ public class RecomendacionServiceTest {
 
     @Test
     void deberiaRetornar0CuandoLesionEsNull() {
-        PerfilDTO perfil = new PerfilDTO(null, null, 0, 0, null, null, null);
+        PerfilDTO perfil = new PerfilDTO(null, null, 0, 0, null, null, null, null);
 
         int resultado = recomendacionService.calcular(perfil);
 
@@ -121,7 +121,7 @@ public class RecomendacionServiceTest {
 
     @Test
     void deberiaRetornar0CuandoObjetivoYNivelSonNull() {
-        PerfilDTO perfil = new PerfilDTO(null, null, null, null, null, null, null);
+        PerfilDTO perfil = new PerfilDTO(null, null, null, null, null, null, null, null);
 
         int resultado = recomendacionService.calcular(perfil);
 
@@ -130,7 +130,7 @@ public class RecomendacionServiceTest {
 
     @Test
     void deberiaRetornar1CuandoObjetivoEsNullSeTrataComoVolumenYNivel1() {
-        PerfilDTO perfil = new PerfilDTO(null, null, null, 1, null, null, null);
+        PerfilDTO perfil = new PerfilDTO(null, null, null, 1, null, null, null, null);
 
         int resultado = recomendacionService.calcular(perfil);
 
@@ -139,7 +139,7 @@ public class RecomendacionServiceTest {
 
     @Test
     void deberiaRetornar0CuandoObjetivoDesconocido() {
-        PerfilDTO perfil = new PerfilDTO(null, null, 99, 0, null, null, null);
+        PerfilDTO perfil = new PerfilDTO(null, null, 99, 0, null, null, null, null);
 
         int resultado = recomendacionService.calcular(perfil);
 
@@ -148,7 +148,7 @@ public class RecomendacionServiceTest {
 
     @Test
     void deberiaRetornar7CuandoLesionNegativa() {
-        PerfilDTO perfil = new PerfilDTO(null, null, 2, 3, null, -1, null);
+        PerfilDTO perfil = new PerfilDTO(null, null, 2, 3, null, -1, null, null);
 
         int resultado = recomendacionService.calcular(perfil);
 
@@ -157,7 +157,7 @@ public class RecomendacionServiceTest {
 
     @Test
     void deberiaRetornar7SinImportarObjetivoNiNivelSiHayLesion() {
-        PerfilDTO perfil = new PerfilDTO(null, null, 3, 5, null, 1, null);
+        PerfilDTO perfil = new PerfilDTO(null, null, 3, 5, null, 1, null, null);
 
         int resultado = recomendacionService.calcular(perfil);
 
@@ -167,7 +167,7 @@ public class RecomendacionServiceTest {
 
     @Test
     void deberiaRetornar2CuandoObjetivo0YNivelMuyAlto() {
-        PerfilDTO perfil = new PerfilDTO(null, null, 0, 10, null, null, null);
+        PerfilDTO perfil = new PerfilDTO(null, null, 0, 10, null, null, null, null);
 
         int resultado = recomendacionService.calcular(perfil);
 
@@ -176,7 +176,7 @@ public class RecomendacionServiceTest {
 
     @Test
     void deberiaRetornar4CuandoObjetivo1YNivelMuyAlto() {
-        PerfilDTO perfil = new PerfilDTO(null, null, 1, 99, null, null, null);
+        PerfilDTO perfil = new PerfilDTO(null, null, 1, 99, null, null, null, null);
 
         int resultado = recomendacionService.calcular(perfil);
 

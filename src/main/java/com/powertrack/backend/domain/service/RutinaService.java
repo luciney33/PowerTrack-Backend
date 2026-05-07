@@ -35,10 +35,9 @@ public class RutinaService {
     }
 
     public Rutina getByTipo(Integer tipo) {
-        return rutinaRepository.findByTipo(tipo)
+        return rutinaRepository.findFirstByTipo(tipo)
                 .map(rutinaMapper::toDomain)
-                .orElseThrow(() -> new
-                        BadRequestException(Constantes.RUTINA_NO_ENCONTRADA));
+                .orElseThrow(() -> new BadRequestException(Constantes.RUTINA_NO_ENCONTRADA));
     }
 
     public Rutina save(Rutina rutina) {

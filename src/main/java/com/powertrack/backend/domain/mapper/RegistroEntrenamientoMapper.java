@@ -40,7 +40,11 @@ public class RegistroEntrenamientoMapper {
                 ejercicioMapper.toDomain(detalle.getEjercicio()),
                 detalle.getSeries(),
                 detalle.getRepeticiones(),
-                detalle.getPeso()
+                detalle.getPeso(),
+                detalle.getDuracionMinutos(),
+                detalle.getVelocidad(),
+                detalle.getInclinacion(),
+                detalle.getKcalGastadas()
         );
     }
 }
