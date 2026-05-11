@@ -26,10 +26,10 @@ public class GeminiService {
         return llamarGemini(prompt);
     }
 
-    public String generarConsejosNutricion(int objetivo, int genero, int edad) {
+    public String generarConsejosNutricion(int objetivo, int genero, int edad, int pesoCat) {
         String prompt = String.format(
-                "Eres un nutricionista. Genera 2-3 consejos nutricionales para: objetivo: %s, género: %s, edad: %s. Solo texto fluido sin listas.",
-                traducirObjetivo(objetivo), traducirGenero(genero), traducirEdad(edad)
+                "Eres un nutricionista. Genera 2-3 consejos nutricionales para: objetivo: %s, género: %s, edad: %s, categoría de peso: %s. Solo texto fluido sin listas.",
+                traducirObjetivo(objetivo), traducirGenero(genero), traducirEdad(edad), traducirPesoCat(pesoCat)
         );
         return llamarGemini(prompt);
     }
@@ -80,6 +80,17 @@ public class GeminiService {
             case 3 -> "lesión de hombro";
             case 4 -> "lesión de tobillo";
             default -> "ninguna";
+        };
+    }
+
+    private String traducirPesoCat(int pesoCat) {
+        return switch (pesoCat) {
+            case 0 -> "bajo peso (menos de 55 kg)";
+            case 1 -> "peso normal (55-70 kg)";
+            case 2 -> "sobrepeso leve (71-85 kg)";
+            case 3 -> "sobrepeso moderado (86-100 kg)";
+            case 4 -> "obesidad (más de 100 kg)";
+            default -> "peso normal";
         };
     }
 

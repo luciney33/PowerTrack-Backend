@@ -11,6 +11,8 @@ import com.powertrack.backend.domain.model.Usuario;
 import com.powertrack.backend.ui.dto.PerfilDTO;
 import com.powertrack.backend.ui.dto.UsuarioDTO;
 import com.powertrack.backend.ui.service.EmailService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
@@ -19,23 +21,28 @@ import java.util.UUID;
 
 @Service
 public class UsuarioService {
+    private static final Logger log = LoggerFactory.getLogger(UsuarioService.class);
+
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final UsuarioMapper usuarioMapper;
     private final EmailService emailService;
     private final RecomendacionService recomendacionService;
     private final GeminiService geminiService;
+    private final TextoPersonalizadoService textoService;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder
-                                  passwordEncoder,
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder,
                           UsuarioMapper usuarioMapper, EmailService emailService,
-                          RecomendacionService recomendacionService, GeminiService geminiService) {
+                          RecomendacionService recomendacionService,
+                          GeminiService geminiService,
+                          TextoPersonalizadoService textoService) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.usuarioMapper = usuarioMapper;
         this.emailService = emailService;
         this.recomendacionService = recomendacionService;
         this.geminiService = geminiService;
+        this.textoService = textoService;
     }
 
     public Usuario register(UsuarioDTO request) {
@@ -88,8 +95,7 @@ public class UsuarioService {
     public Usuario completarPerfil(String username, PerfilDTO perfil) {
         UsuarioEntity entity = usuarioRepository.findByUsername(username);
         if (entity == null) {
-            throw new BadRequestException(Constantes.USUARIO_NO_ENCONTRADO +
-                    username);
+            throw new BadRequestException(Constantes.USUARIO_NO_ENCONTRADO + username);
         }
 
         entity.setGenero(perfil.genero());
@@ -103,27 +109,16 @@ public class UsuarioService {
         entity.setRecomendacion(recomendacionService.calcular(perfil));
         entity.setFormularioCompletado(true);
 
-        String descripcionRutina = null;
-        String consejosNutricion = null;
+        int objetivo = perfil.objetivo() != null ? perfil.objetivo() : 0;
+        int nivel = perfil.nivel() != null ? perfil.nivel() : 0;
+        int dias = perfil.diasEntrenamiento() != null ? perfil.diasEntrenamiento() : 3;
+        int lesion = perfil.lesion() != null ? perfil.lesion() : 0;
+        int genero = perfil.genero() != null ? perfil.genero() : 0;
+        int edad = perfil.edad() != null ? perfil.edad() : 0;
+        int pesoCat = perfil.pesoCat() != null ? perfil.pesoCat() : 1;
 
-        try {
-            descripcionRutina = geminiService.generarDescripcionRutina(
-                    perfil.objetivo(), perfil.nivel(),
-                    perfil.diasEntrenamiento(),
-                    perfil.lesion() != null ? perfil.lesion() : 0
-            );
-            consejosNutricion = geminiService.generarConsejosNutricion(
-                    perfil.objetivo(),
-                    perfil.genero() != null ? perfil.genero() : 0,
-                    perfil.edad() != null ? perfil.edad() : 0
-            );
-        } catch (Exception e) {
-            System.err.println("Error al generar contenido con Gemini: " +
-                    e.getMessage());
-        }
-
-        entity.setDescripcionRutina(descripcionRutina);
-        entity.setConsejosNutricion(consejosNutricion);
+        entity.setDescripcionRutina(generarDescripcion(objetivo, nivel, dias, lesion));
+        entity.setConsejosNutricion(generarConsejos(objetivo, genero, edad, pesoCat));
 
         return usuarioMapper.toDomain(usuarioRepository.save(entity));
     }
@@ -131,9 +126,41 @@ public class UsuarioService {
     public Usuario getByUsername(String username) {
         UsuarioEntity entity = usuarioRepository.findByUsername(username);
         if (entity == null) {
-            throw new BadRequestException(Constantes.USUARIO_NO_ENCONTRADO +
-                    username);
+            throw new BadRequestException(Constantes.USUARIO_NO_ENCONTRADO + username);
+        }
+        if (entity.isFormularioCompletado() && entity.getDescripcionRutina() == null) {
+            entity.setDescripcionRutina(textoService.generarDescripcionRutina(
+                    entity.getObjetivo() != null ? entity.getObjetivo() : 0,
+                    entity.getNivel() != null ? entity.getNivel() : 0,
+                    entity.getDiasEntrenamiento() != null ? entity.getDiasEntrenamiento() : 3,
+                    entity.getLesion() != null ? entity.getLesion() : 0
+            ));
+            entity.setConsejosNutricion(textoService.generarConsejosNutricion(
+                    entity.getObjetivo() != null ? entity.getObjetivo() : 0,
+                    entity.getGenero() != null ? entity.getGenero() : 0,
+                    entity.getEdad() != null ? entity.getEdad() : 0,
+                    entity.getPesoCat() != null ? entity.getPesoCat() : 1
+            ));
+            usuarioRepository.save(entity);
         }
         return usuarioMapper.toDomain(entity);
+    }
+
+    private String generarDescripcion(int objetivo, int nivel, int dias, int lesion) {
+        try {
+            return geminiService.generarDescripcionRutina(objetivo, nivel, dias, lesion);
+        } catch (Exception e) {
+            log.warn("Gemini no disponible, usando texto local: {}", e.getMessage());
+            return textoService.generarDescripcionRutina(objetivo, nivel, dias, lesion);
+        }
+    }
+
+    private String generarConsejos(int objetivo, int genero, int edad, int pesoCat) {
+        try {
+            return geminiService.generarConsejosNutricion(objetivo, genero, edad, pesoCat);
+        } catch (Exception e) {
+            log.warn("Gemini no disponible, usando texto local: {}", e.getMessage());
+            return textoService.generarConsejosNutricion(objetivo, genero, edad, pesoCat);
+        }
     }
 }

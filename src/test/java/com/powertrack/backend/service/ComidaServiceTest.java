@@ -34,8 +34,8 @@ public class ComidaServiceTest {
     void deberiaRetornarTodasLasComidas() {
         ComidaEntity entity1 = new ComidaEntity();
         ComidaEntity entity2 = new ComidaEntity();
-        Comida comida1 = new Comida(1L, "Pollo", 200, 40.0, 0.0, 5.0, "ALMUERZO");
-        Comida comida2 = new Comida(2L, "Arroz", 350, 7.0, 75.0, 1.0, "ALMUERZO");
+        Comida comida1 = new Comida(1L, "Pollo", 200, 40.0, 0.0, 5.0, "ALMUERZO", null);
+        Comida comida2 = new Comida(2L, "Arroz", 350, 7.0, 75.0, 1.0, "ALMUERZO", null);
 
         when(comidaRepository.findAll()).thenReturn(List.of(entity1, entity2));
         when(comidaMapper.toDomain(entity1)).thenReturn(comida1);
@@ -63,7 +63,7 @@ public class ComidaServiceTest {
     @Test
     void deberiaRetornarComidaCuandoIdExiste() {
         ComidaEntity entity = new ComidaEntity();
-        Comida comidaEsperada = new Comida(1L, "Avena", 370, 13.0, 66.0, 7.0, "DESAYUNO");
+        Comida comidaEsperada = new Comida(1L, "Avena", 370, 13.0, 66.0, 7.0, "DESAYUNO", null);
 
         when(comidaRepository.findById(1L)).thenReturn(Optional.of(entity));
         when(comidaMapper.toDomain(entity)).thenReturn(comidaEsperada);
@@ -90,8 +90,8 @@ public class ComidaServiceTest {
     void deberiaRetornarComidasPorCategoria() {
         ComidaEntity entity1 = new ComidaEntity();
         ComidaEntity entity2 = new ComidaEntity();
-        Comida comida1 = new Comida(1L, "Tostadas", 250, 8.0, 45.0, 3.0, "DESAYUNO");
-        Comida comida2 = new Comida(2L, "Avena", 370, 13.0, 66.0, 7.0, "DESAYUNO");
+        Comida comida1 = new Comida(1L, "Tostadas", 250, 8.0, 45.0, 3.0, "DESAYUNO", null);
+        Comida comida2 = new Comida(2L, "Avena", 370, 13.0, 66.0, 7.0, "DESAYUNO", null);
 
         when(comidaRepository.findByCategoria("DESAYUNO")).thenReturn(List.of(entity1, entity2));
         when(comidaMapper.toDomain(entity1)).thenReturn(comida1);
@@ -125,9 +125,9 @@ public class ComidaServiceTest {
 
     @Test
     void deberiaGuardarComidaCorrectamente() {
-        Comida comidaEntrada = new Comida(null, "Salmon", 180, 25.0, 0.0, 10.0, "CENA");
+        Comida comidaEntrada = new Comida(null, "Salmon", 180, 25.0, 0.0, 10.0, "CENA", null);
         ComidaEntity entidadGuardada = new ComidaEntity();
-        Comida comidaEsperada = new Comida(1L, "Salmon", 180, 25.0, 0.0, 10.0, "CENA");
+        Comida comidaEsperada = new Comida(1L, "Salmon", 180, 25.0, 0.0, 10.0, "CENA", null);
 
         when(comidaRepository.save(any(ComidaEntity.class))).thenReturn(entidadGuardada);
         when(comidaMapper.toDomain(entidadGuardada)).thenReturn(comidaEsperada);
@@ -141,9 +141,9 @@ public class ComidaServiceTest {
 
     @Test
     void deberiaMappearTodosLosCamposYConvertirCategoriaAMayusculasAlGuardar() {
-        Comida comidaEntrada = new Comida(null, "Yogur", 100, 10.0, 12.0, 2.5, "desayuno");
+        Comida comidaEntrada = new Comida(null, "Yogur", 100, 10.0, 12.0, 2.5, "desayuno", null);
         ComidaEntity entidadGuardada = new ComidaEntity();
-        Comida comidaEsperada = new Comida(1L, "Yogur", 100, 10.0, 12.0, 2.5, "DESAYUNO");
+        Comida comidaEsperada = new Comida(1L, "Yogur", 100, 10.0, 12.0, 2.5, "DESAYUNO", null);
 
         when(comidaRepository.save(any(ComidaEntity.class))).thenAnswer(inv -> {
             ComidaEntity e = inv.getArgument(0);

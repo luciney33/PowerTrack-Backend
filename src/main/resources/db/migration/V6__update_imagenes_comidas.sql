@@ -1,0 +1,21 @@
+ALTER TABLE comidas ADD COLUMN imagen_url VARCHAR(500) NULL;
+
+UPDATE comidas SET imagen_url = '/images/comidas/avena_con_leche.jpg' WHERE nombre = 'Avena con leche';
+UPDATE comidas SET imagen_url = '/images/comidas/tortillafrancesa.jpg' WHERE nombre = 'Tortilla francesa';
+UPDATE comidas SET imagen_url = '/images/comidas/yogurgriego_frutos.jpg' WHERE nombre = 'Yogur griego con fruta';
+UPDATE comidas SET imagen_url = '/images/comidas/tostadas_aguacate_huevo.jpg' WHERE nombre = 'Tostadas con aguacate';
+UPDATE comidas SET imagen_url = '/images/comidas/batidodeproteinas.png' WHERE nombre = 'Batido de proteínas';
+UPDATE comidas SET imagen_url = '/images/comidas/arroz_con_pollo.jpg' WHERE nombre = 'Arroz con pollo';
+UPDATE comidas SET imagen_url = '/images/comidas/pastatun.jpg' WHERE nombre = 'Pasta con atún';
+UPDATE comidas SET imagen_url = '/images/comidas/ensalada_quinoa.jpg' WHERE nombre = 'Ensalada de quinoa';
+UPDATE comidas SET imagen_url = '/images/comidas/lentejas_verduras.jpg' WHERE nombre = 'Lentejas con verduras';
+UPDATE comidas SET imagen_url = '/images/comidas/pollo_plancha.jpg' WHERE nombre = 'Pechuga a la plancha con patata';
+UPDATE comidas SET imagen_url = '/images/comidas/salmon_verduras.jpg' WHERE nombre = 'Salmón con verduras';
+UPDATE comidas SET imagen_url = '/images/comidas/merluza_vapor.jpg' WHERE nombre = 'Merluza al vapor';
+UPDATE comidas SET imagen_url = '/images/comidas/tortilla_verduras.jpg' WHERE nombre = 'Tortilla de verduras';
+UPDATE comidas SET imagen_url = '/images/comidas/ensalada_pollo.jpg' WHERE nombre = 'Ensalada de pollo';
+UPDATE comidas SET imagen_url = '/images/comidas/crema_verduras.jpg' WHERE nombre = 'Crema de verduras';
+UPDATE comidas SET imagen_url = '/images/comidas/macedonia.jpg' WHERE nombre = 'Fruta de temporada';
+UPDATE comidas SET imagen_url = '/images/comidas/frutos_secos.jpg' WHERE nombre = 'Frutos secos';
+UPDATE comidas SET imagen_url = '/images/comidas/barrita_proteica.jpg' WHERE nombre = 'Barrita de proteínas';
+UPDATE comidas SET imagen_url = '/images/comidas/queso_miel.jpg' WHERE nombre = 'Queso fresco con miel';

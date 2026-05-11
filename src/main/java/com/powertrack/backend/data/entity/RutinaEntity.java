@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import com.powertrack.backend.common.Constantes;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = Constantes.TABLE_RUTINAS)
@@ -13,8 +13,8 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = "ejercicios")
-@ToString(exclude = "ejercicios")
+@EqualsAndHashCode(exclude = "rutinaEjercicios")
+@ToString(exclude = "rutinaEjercicios")
 public class RutinaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,11 +28,6 @@ public class RutinaEntity {
     @Column(nullable = false)
     private Integer tipo;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = Constantes.TABLE_RUTINA_EJERCICIOS,
-            joinColumns = @JoinColumn(name = Constantes.RUTINA_ID),
-            inverseJoinColumns = @JoinColumn(name = Constantes.EJERCICIO_ID)
-    )
-    private Set<EjercicioEntity> ejercicios = new HashSet<>();
+    @OneToMany(mappedBy = "rutina", fetch = FetchType.EAGER)
+    private List<RutinaEjercicioEntity> rutinaEjercicios = new ArrayList<>();
 }

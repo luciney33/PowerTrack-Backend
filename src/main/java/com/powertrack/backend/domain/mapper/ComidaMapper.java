@@ -16,7 +16,8 @@ public class ComidaMapper {
                 entity.getProteinas(),
                 entity.getCarbohidratos(),
                 entity.getGrasas(),
-                entity.getCategoria()
+                entity.getCategoria(),
+                entity.getImagenUrl()
         );
     }
 }

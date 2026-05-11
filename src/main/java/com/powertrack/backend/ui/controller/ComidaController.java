@@ -54,7 +54,7 @@ public class ComidaController {
     @Operation(summary = "Crear comida (solo admin)")
     public ResponseEntity<ComidaResponseDTO> save(@RequestBody ComidaResponseDTO request) {
         Comida nueva = new Comida(null, request.nombre(), request.calorias(), request.proteinas(),
-                request.carbohidratos(), request.grasas(), request.categoria());
+                request.carbohidratos(), request.grasas(), request.categoria(), null);
         return ResponseEntity.status(HttpStatus.CREATED).body(toDTO(comidaService.save(nueva)));
     }
 
@@ -69,6 +69,6 @@ public class ComidaController {
 
     private ComidaResponseDTO toDTO(Comida c) {
         return new ComidaResponseDTO(c.id(), c.nombre(), c.calorias(),
-                c.proteinas(), c.carbohidratos(), c.grasas(), c.categoria());
+                c.proteinas(), c.carbohidratos(), c.grasas(), c.categoria(), c.imagenUrl());
     }
 }

@@ -6,6 +6,6 @@ public record RutinaResponseDTO(Long id,
                                 String nombre,
                                 String descripcion,
                                 Integer tipo,
-                                List<EjercicioResponseDTO> ejercicios
+                                List<RutinaEjercicioResponseDTO> ejercicios
 ) {
 }

@@ -83,6 +83,10 @@ public class RegistroEntrenamientoService {
                 detalle.setSeries(detalleDTO.series());
                 detalle.setRepeticiones(detalleDTO.repeticiones());
                 detalle.setPeso(detalleDTO.peso());
+                detalle.setDuracionMinutos(detalleDTO.duracionMinutos());
+                detalle.setVelocidad(detalleDTO.velocidad());
+                detalle.setInclinacion(detalleDTO.inclinacion());
+                detalle.setKcalGastadas(detalleDTO.kcalGastadas());
                 detalles.add(detalle);
             }
         }

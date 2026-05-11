@@ -81,7 +81,7 @@ public class PlanNutricionalController {
     private PlanNutricionalResponseDTO toDTO(PlanNutricional p) {
         List<ComidaResponseDTO> comidas = p.comidas().stream()
                 .map(c -> new ComidaResponseDTO(c.id(), c.nombre(), c.calorias(),
-                        c.proteinas(), c.carbohidratos(), c.grasas(), c.categoria()))
+                        c.proteinas(), c.carbohidratos(), c.grasas(), c.categoria(), c.imagenUrl()))
                 .collect(Collectors.toList());
         return new PlanNutricionalResponseDTO(p.id(), p.nombre(), p.descripcion(), p.tipo(),
                 p.caloriasObjetivo(), p.proteinasObjetivo(), p.carbohidratosObjetivo(),

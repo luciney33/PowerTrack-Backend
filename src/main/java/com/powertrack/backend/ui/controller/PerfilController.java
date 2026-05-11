@@ -47,7 +47,7 @@ public class PerfilController {
 
     private UsuarioResponseDTO toResponseDTO(Usuario u) {
         return new UsuarioResponseDTO(u.id(), u.username(), u.email(),
-                u.nombre(),
-                u.rol(), u.formularioCompletado(), u.recomendacion(), u.descripcionRutina(), u.consejosNutricion());
+                u.nombre(), u.rol(), u.formularioCompletado(), u.recomendacion(),
+                u.descripcionRutina(), u.consejosNutricion());
     }
 }

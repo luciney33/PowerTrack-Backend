@@ -33,4 +33,7 @@ public class ComidaEntity {
 
     @Column(nullable = false, length = 20)
     private String categoria;
+
+    @Column(name = "imagen_url")
+    private String imagenUrl;
 }

@@ -1,12 +1,8 @@
 package com.powertrack.backend.data.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.powertrack.backend.common.Constantes;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = Constantes.TABLE_EJERCICIOS)
@@ -14,8 +10,6 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = "rutinas")
-@ToString(exclude = "rutinas")
 public class EjercicioEntity {
 
     @Id
@@ -33,9 +27,4 @@ public class EjercicioEntity {
 
     @Column
     private String descripcion;
-
-    @ManyToMany(mappedBy = Constantes.EJERCICIOS)
-    @JsonIgnore
-    private Set<RutinaEntity> entrenamientos = new HashSet<>();
 }
-

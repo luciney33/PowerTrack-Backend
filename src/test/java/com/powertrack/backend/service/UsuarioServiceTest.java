@@ -7,7 +7,9 @@ import com.powertrack.backend.domain.error.BadRequestException;
 import com.powertrack.backend.domain.mapper.UsuarioMapper;
 import com.powertrack.backend.domain.model.Rol;
 import com.powertrack.backend.domain.model.Usuario;
+import com.powertrack.backend.domain.service.GeminiService;
 import com.powertrack.backend.domain.service.RecomendacionService;
+import com.powertrack.backend.domain.service.TextoPersonalizadoService;
 import com.powertrack.backend.domain.service.UsuarioService;
 import com.powertrack.backend.ui.dto.PerfilDTO;
 import com.powertrack.backend.ui.dto.UsuarioDTO;
@@ -34,6 +36,8 @@ public class UsuarioServiceTest {
     @Mock private UsuarioMapper usuarioMapper;
     @Mock private EmailService emailService;
     @Mock private RecomendacionService recomendacionService;
+    @Mock private GeminiService geminiService;
+    @Mock private TextoPersonalizadoService textoService;
 
     @InjectMocks
     private UsuarioService usuarioService;
@@ -68,7 +72,7 @@ public class UsuarioServiceTest {
     void deberiaCodificarPasswordAlRegistrar() {
         UsuarioDTO dto = new UsuarioDTO("lucia", "pass123", "lucia@email.com", "Lucia");
         UsuarioEntity entidadGuardada = new UsuarioEntity();
-        Usuario usuarioEsperado =  new Usuario(1L, "lucia", "encoded", "lucia@email.com",
+        Usuario usuarioEsperado = new Usuario(1L, "lucia", "encoded", "lucia@email.com",
                 "Lucia", Rol.USER, false, null, null,
                 null, null, null, null, null, null, null, null, null, false, null, null);
 
@@ -111,7 +115,6 @@ public class UsuarioServiceTest {
         verify(usuarioRepository, never()).save(any());
         verify(emailService, never()).enviarEmailActivacion(any(), any(), any());
     }
-
 
     @Test
     void deberiaActivarCuentaCuandoCodigoValido() {
@@ -180,18 +183,19 @@ public class UsuarioServiceTest {
         verify(usuarioRepository, never()).save(any());
     }
 
-
     @Test
     void deberiaCompletarPerfilCuandoUsuarioExiste() {
-        PerfilDTO perfil = new PerfilDTO(1, 25, 1, 2, 3, null,2, 65);
+        PerfilDTO perfil = new PerfilDTO(1, 25, 1, 2, 3, null, 2, 65);
         UsuarioEntity entity = new UsuarioEntity();
         UsuarioEntity guardada = new UsuarioEntity();
         Usuario usuarioEsperado = new Usuario(1L, "lucia", "encoded", "lucia@email.com",
                 "Lucia", Rol.USER, true, null, null,
-                1, 25, 1, 2, 3, null, 0, 4, 65, false, null, null);
+                1, 25, 1, 2, 3, null, 0, 4, 65, false, "desc", "consejos");
 
         when(usuarioRepository.findByUsername("lucia")).thenReturn(entity);
         when(recomendacionService.calcular(perfil)).thenReturn(4);
+        when(geminiService.generarDescripcionRutina(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn("desc");
+        when(geminiService.generarConsejosNutricion(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn("consejos");
         when(usuarioRepository.save(entity)).thenReturn(guardada);
         when(usuarioMapper.toDomain(guardada)).thenReturn(usuarioEsperado);
 
@@ -201,17 +205,21 @@ public class UsuarioServiceTest {
         assertTrue(entity.isFormularioCompletado());
         assertEquals(4, entity.getRecomendacion());
         verify(recomendacionService).calcular(perfil);
+        verify(geminiService).generarDescripcionRutina(anyInt(), anyInt(), anyInt(), anyInt());
+        verify(geminiService).generarConsejosNutricion(anyInt(), anyInt(), anyInt(), anyInt());
         verify(usuarioRepository).save(entity);
     }
 
     @Test
     void deberiaLlamarARecomendacionServiceAlCompletarPerfil() {
-        PerfilDTO perfil = new PerfilDTO(null, null, 2, 0, null, null, null,65);
+        PerfilDTO perfil = new PerfilDTO(null, null, 2, 0, null, null, null, 65);
         UsuarioEntity entity = new UsuarioEntity();
         UsuarioEntity guardada = new UsuarioEntity();
 
         when(usuarioRepository.findByUsername("lucia")).thenReturn(entity);
         when(recomendacionService.calcular(perfil)).thenReturn(5);
+        when(geminiService.generarDescripcionRutina(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn("desc");
+        when(geminiService.generarConsejosNutricion(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn("consejos");
         when(usuarioRepository.save(entity)).thenReturn(guardada);
         when(usuarioMapper.toDomain(guardada)).thenReturn(mock(Usuario.class));
 
@@ -222,7 +230,7 @@ public class UsuarioServiceTest {
 
     @Test
     void deberiaLanzarExcepcionAlCompletarPerfilSiUsuarioNoExiste() {
-        PerfilDTO perfil = new PerfilDTO(null, null, 1, 0, null, null, null,65);
+        PerfilDTO perfil = new PerfilDTO(null, null, 1, 0, null, null, null, 65);
 
         when(usuarioRepository.findByUsername("noexiste")).thenReturn(null);
 
@@ -232,7 +240,6 @@ public class UsuarioServiceTest {
         assertTrue(ex.getMessage().contains(Constantes.USUARIO_NO_ENCONTRADO));
         verify(usuarioRepository, never()).save(any());
     }
-
 
     @Test
     void deberiaRetornarUsuarioCuandoExiste() {

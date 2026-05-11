@@ -65,9 +65,10 @@ public class UsuarioEntity {
     @Column(name = "formulario_completado", nullable = false)
     private boolean formularioCompletado = false;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "descripcion_rutina", columnDefinition = "TEXT")
     private String descripcionRutina;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "consejos_nutricion", columnDefinition = "TEXT")
     private String consejosNutricion;
+
 }

@@ -6,7 +6,7 @@ import com.powertrack.backend.domain.model.Rutina;
 import com.powertrack.backend.domain.model.Usuario;
 import com.powertrack.backend.domain.service.RutinaService;
 import com.powertrack.backend.domain.service.UsuarioService;
-import com.powertrack.backend.ui.dto.EjercicioResponseDTO;
+import com.powertrack.backend.ui.dto.RutinaEjercicioResponseDTO;
 import com.powertrack.backend.ui.dto.RutinaResponseDTO;
 import com.powertrack.backend.ui.security.IsAdmin;
 import com.powertrack.backend.ui.security.IsUser;
@@ -84,9 +84,10 @@ public class RutinaController {
     }
 
     private RutinaResponseDTO toDTO(Rutina r) {
-        List<EjercicioResponseDTO> ejercicios = r.ejercicios().stream()
-                .map(e -> new EjercicioResponseDTO(e.id(), e.nombre(), e.tipoEntrenamiento(),
-                        e.imagenUrl(), e.descripcion()))
+        List<RutinaEjercicioResponseDTO> ejercicios = r.ejercicios().stream()
+                .map(e -> new RutinaEjercicioResponseDTO(e.ejercicioId(), e.nombre(),
+                        e.tipoEntrenamiento(), e.imagenUrl(), e.descripcion(),
+                        e.series(), e.repeticiones(), e.descansoSeg()))
                 .collect(Collectors.toList());
         return new RutinaResponseDTO(r.id(), r.nombre(), r.descripcion(), r.tipo(), ejercicios);
     }

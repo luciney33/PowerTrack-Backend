@@ -7,5 +7,5 @@ public record Rutina(
         String nombre,
         String descripcion,
         Integer tipo,
-        List<Ejercicio> ejercicios
+        List<RutinaEjercicio> ejercicios
 ) {}

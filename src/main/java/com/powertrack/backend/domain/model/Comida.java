@@ -7,6 +7,7 @@ public record Comida(
         Double proteinas,
         Double carbohidratos,
         Double grasas,
-        String categoria
+        String categoria,
+        String imagenUrl
 ) {
 }
