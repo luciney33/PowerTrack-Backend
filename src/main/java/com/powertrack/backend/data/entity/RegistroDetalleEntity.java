@@ -24,13 +24,13 @@ public class RegistroDetalleEntity {
     @JoinColumn(name = Constantes.EJERCICIO_ID, nullable = false)
     private EjercicioEntity ejercicio;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer series;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer repeticiones;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Double peso;
 
     @Column(nullable = true)
