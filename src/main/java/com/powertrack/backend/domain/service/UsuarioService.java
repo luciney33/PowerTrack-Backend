@@ -11,8 +11,6 @@ import com.powertrack.backend.domain.model.Usuario;
 import com.powertrack.backend.ui.dto.PerfilDTO;
 import com.powertrack.backend.ui.dto.UsuarioDTO;
 import com.powertrack.backend.ui.service.EmailService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
@@ -21,27 +19,23 @@ import java.util.UUID;
 
 @Service
 public class UsuarioService {
-    private static final Logger log = LoggerFactory.getLogger(UsuarioService.class);
 
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final UsuarioMapper usuarioMapper;
     private final EmailService emailService;
     private final RecomendacionService recomendacionService;
-    private final GeminiService geminiService;
     private final TextoPersonalizadoService textoService;
 
     public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder,
                           UsuarioMapper usuarioMapper, EmailService emailService,
                           RecomendacionService recomendacionService,
-                          GeminiService geminiService,
                           TextoPersonalizadoService textoService) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.usuarioMapper = usuarioMapper;
         this.emailService = emailService;
         this.recomendacionService = recomendacionService;
-        this.geminiService = geminiService;
         this.textoService = textoService;
     }
 
@@ -117,8 +111,8 @@ public class UsuarioService {
         int edad = perfil.edad() != null ? perfil.edad() : 0;
         int pesoCat = perfil.pesoCat() != null ? perfil.pesoCat() : 1;
 
-        entity.setDescripcionRutina(generarDescripcion(objetivo, nivel, dias, lesion));
-        entity.setConsejosNutricion(generarConsejos(objetivo, genero, edad, pesoCat));
+        entity.setDescripcionRutina(textoService.generarDescripcionRutina(objetivo, nivel, dias, lesion));
+        entity.setConsejosNutricion(textoService.generarConsejosNutricion(objetivo, genero, edad, pesoCat));
 
         return usuarioMapper.toDomain(usuarioRepository.save(entity));
     }
@@ -146,21 +140,5 @@ public class UsuarioService {
         return usuarioMapper.toDomain(entity);
     }
 
-    private String generarDescripcion(int objetivo, int nivel, int dias, int lesion) {
-        try {
-            return geminiService.generarDescripcionRutina(objetivo, nivel, dias, lesion);
-        } catch (Exception e) {
-            log.warn("Gemini no disponible, usando texto local: {}", e.getMessage());
-            return textoService.generarDescripcionRutina(objetivo, nivel, dias, lesion);
-        }
-    }
 
-    private String generarConsejos(int objetivo, int genero, int edad, int pesoCat) {
-        try {
-            return geminiService.generarConsejosNutricion(objetivo, genero, edad, pesoCat);
-        } catch (Exception e) {
-            log.warn("Gemini no disponible, usando texto local: {}", e.getMessage());
-            return textoService.generarConsejosNutricion(objetivo, genero, edad, pesoCat);
-        }
-    }
 }

@@ -7,7 +7,6 @@ import com.powertrack.backend.domain.error.BadRequestException;
 import com.powertrack.backend.domain.mapper.UsuarioMapper;
 import com.powertrack.backend.domain.model.Rol;
 import com.powertrack.backend.domain.model.Usuario;
-import com.powertrack.backend.domain.service.GeminiService;
 import com.powertrack.backend.domain.service.RecomendacionService;
 import com.powertrack.backend.domain.service.TextoPersonalizadoService;
 import com.powertrack.backend.domain.service.UsuarioService;
@@ -36,7 +35,6 @@ public class UsuarioServiceTest {
     @Mock private UsuarioMapper usuarioMapper;
     @Mock private EmailService emailService;
     @Mock private RecomendacionService recomendacionService;
-    @Mock private GeminiService geminiService;
     @Mock private TextoPersonalizadoService textoService;
 
     @InjectMocks
@@ -194,8 +192,8 @@ public class UsuarioServiceTest {
 
         when(usuarioRepository.findByUsername("lucia")).thenReturn(entity);
         when(recomendacionService.calcular(perfil)).thenReturn(4);
-        when(geminiService.generarDescripcionRutina(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn("desc");
-        when(geminiService.generarConsejosNutricion(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn("consejos");
+        when(textoService.generarDescripcionRutina(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn("desc");
+        when(textoService.generarConsejosNutricion(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn("consejos");
         when(usuarioRepository.save(entity)).thenReturn(guardada);
         when(usuarioMapper.toDomain(guardada)).thenReturn(usuarioEsperado);
 
@@ -205,8 +203,8 @@ public class UsuarioServiceTest {
         assertTrue(entity.isFormularioCompletado());
         assertEquals(4, entity.getRecomendacion());
         verify(recomendacionService).calcular(perfil);
-        verify(geminiService).generarDescripcionRutina(anyInt(), anyInt(), anyInt(), anyInt());
-        verify(geminiService).generarConsejosNutricion(anyInt(), anyInt(), anyInt(), anyInt());
+        verify(textoService).generarDescripcionRutina(anyInt(), anyInt(), anyInt(), anyInt());
+        verify(textoService).generarConsejosNutricion(anyInt(), anyInt(), anyInt(), anyInt());
         verify(usuarioRepository).save(entity);
     }
 
@@ -218,8 +216,8 @@ public class UsuarioServiceTest {
 
         when(usuarioRepository.findByUsername("lucia")).thenReturn(entity);
         when(recomendacionService.calcular(perfil)).thenReturn(5);
-        when(geminiService.generarDescripcionRutina(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn("desc");
-        when(geminiService.generarConsejosNutricion(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn("consejos");
+        when(textoService.generarDescripcionRutina(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn("desc");
+        when(textoService.generarConsejosNutricion(anyInt(), anyInt(), anyInt(), anyInt())).thenReturn("consejos");
         when(usuarioRepository.save(entity)).thenReturn(guardada);
         when(usuarioMapper.toDomain(guardada)).thenReturn(mock(Usuario.class));
 

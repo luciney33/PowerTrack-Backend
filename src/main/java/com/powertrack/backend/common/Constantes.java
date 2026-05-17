@@ -9,7 +9,6 @@ public class Constantes {
     public static final String AUTHORIZATION = "Authorization";
     public static final String BEARER = "Bearer ";
     public static final int BEARER_PREFIX_LENGTH = 7;
-    public static final String BEARER_TYPE = "Bearer";
     public static final String SHA_512 = "SHA-512";
     public static final String AES = "AES";
 
@@ -77,8 +76,7 @@ public class Constantes {
     public static final String COMIDA_ID = "comida_id";
     public static final String REGISTRO_ID = "registro_id";
     public static final String USUARIO_ID = "usuario_id";
-    public static final String EJERCICIOS = "ejercicios";
-    public static final String COMIDAS = "comidas";
+
 
     // Thymeleaf templates
     public static final String TEMPLATE = "usuario-activo";
@@ -90,7 +88,6 @@ public class Constantes {
     public static final String ACTIVAR = "activar";
     public static final String CODIGO = "codigo";
     public static final String UTF_8 = "UTF-8";
-    public static final String ACTIVACION_DE_CUENTA = "Activación de Cuenta - PowerTrack";
 
     // Mensajes de error
     public static final String MSG_USERNAME_YA_EN_USO = "El nombre de usuario ya está en uso";
@@ -114,7 +111,6 @@ public class Constantes {
     // Mensajes de log
     public static final String FALLO_AUTENTICACION = "Fallo de autenticación para usuario: {}";
     public static final String ERROR_REFRESCAR_TOKENS = "Error al refrescar tokens: {}";
-    public static final String ERROR_ENVIAR_CORREO = "Error al enviar correo a: {}";
     public static final String ERROR_TOKEN_JWT = "Error al procesar el token JWT: ";
     public static final String ACTIVACION_DE_CUENTA_SISTEMA = "Activación de cuenta - Sistema";
     public static final String ERROR_AL_ENVIAR_CORREO_A = "Error al enviar correo a {}";
@@ -137,12 +133,4 @@ public class Constantes {
     public static final String TAG_PLANES_DESC = "Planes de nutrición adaptados al objetivo";
     public static final String TAG_COMIDAS = "Comidas";
     public static final String TAG_COMIDAS_DESC = "Catálogo de alimentos y recetas";
-
-    // HTTP status (Swagger)
-    public static final String HTTP_200 = "200";
-    public static final String HTTP_201 = "201";
-    public static final String HTTP_400 = "400";
-    public static final String HTTP_401 = "401";
-    public static final String HTTP_403 = "403";
-    public static final String HTTP_404 = "404";
 }
